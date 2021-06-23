@@ -17,7 +17,6 @@
 package v1beta1
 
 import (
-	"context"
 	time "time"
 
 	securityv1beta1 "istio.io/client-go/pkg/apis/security/v1beta1"
@@ -60,13 +59,13 @@ func NewFilteredRequestAuthenticationInformer(client versioned.Interface, namesp
 				if tweakListOptions != nil {
 					tweakListOptions(&options)
 				}
-				return client.SecurityV1beta1().RequestAuthentications(namespace).List(context.TODO(), options)
+				return client.SecurityV1beta1().RequestAuthentications(namespace).List(options)
 			},
 			WatchFunc: func(options v1.ListOptions) (watch.Interface, error) {
 				if tweakListOptions != nil {
 					tweakListOptions(&options)
 				}
-				return client.SecurityV1beta1().RequestAuthentications(namespace).Watch(context.TODO(), options)
+				return client.SecurityV1beta1().RequestAuthentications(namespace).Watch(options)
 			},
 		},
 		&securityv1beta1.RequestAuthentication{},

@@ -17,7 +17,6 @@
 package v1beta1
 
 import (
-	"context"
 	time "time"
 
 	networkingv1beta1 "istio.io/client-go/pkg/apis/networking/v1beta1"
@@ -60,13 +59,13 @@ func NewFilteredDestinationRuleInformer(client versioned.Interface, namespace st
 				if tweakListOptions != nil {
 					tweakListOptions(&options)
 				}
-				return client.NetworkingV1beta1().DestinationRules(namespace).List(context.TODO(), options)
+				return client.NetworkingV1beta1().DestinationRules(namespace).List(options)
 			},
 			WatchFunc: func(options v1.ListOptions) (watch.Interface, error) {
 				if tweakListOptions != nil {
 					tweakListOptions(&options)
 				}
-				return client.NetworkingV1beta1().DestinationRules(namespace).Watch(context.TODO(), options)
+				return client.NetworkingV1beta1().DestinationRules(namespace).Watch(options)
 			},
 		},
 		&networkingv1beta1.DestinationRule{},

@@ -18,7 +18,6 @@
 package main
 
 import (
-	"context"
 	"log"
 	"os"
 
@@ -47,7 +46,7 @@ func main() {
 	}
 
 	// Test VirtualServices
-	vsList, err := ic.NetworkingV1alpha3().VirtualServices(namespace).List(context.TODO(), metav1.ListOptions{})
+	vsList, err := ic.NetworkingV1alpha3().VirtualServices(namespace).List(metav1.ListOptions{})
 	if err != nil {
 		log.Fatalf("Failed to get VirtualService in %s namespace: %s", namespace, err)
 	}
@@ -58,7 +57,7 @@ func main() {
 	}
 
 	// Test DestinationRules
-	drList, err := ic.NetworkingV1alpha3().DestinationRules(namespace).List(context.TODO(), metav1.ListOptions{})
+	drList, err := ic.NetworkingV1alpha3().DestinationRules(namespace).List(metav1.ListOptions{})
 	if err != nil {
 		log.Fatalf("Failed to get DestinationRule in %s namespace: %s", namespace, err)
 	}
@@ -69,7 +68,7 @@ func main() {
 	}
 
 	// Test Gateway
-	gwList, err := ic.NetworkingV1alpha3().Gateways(namespace).List(context.TODO(), metav1.ListOptions{})
+	gwList, err := ic.NetworkingV1alpha3().Gateways(namespace).List(metav1.ListOptions{})
 	if err != nil {
 		log.Fatalf("Failed to get Gateway in %s namespace: %s", namespace, err)
 	}
@@ -82,7 +81,7 @@ func main() {
 	}
 
 	// Test ServiceEntry
-	seList, err := ic.NetworkingV1alpha3().ServiceEntries(namespace).List(context.TODO(), metav1.ListOptions{})
+	seList, err := ic.NetworkingV1alpha3().ServiceEntries(namespace).List(metav1.ListOptions{})
 	if err != nil {
 		log.Fatalf("Failed to get ServiceEntry in %s namespace: %s", namespace, err)
 	}

@@ -17,7 +17,6 @@
 package v1beta1
 
 import (
-	"context"
 	"time"
 
 	v1beta1 "istio.io/client-go/pkg/apis/security/v1beta1"
@@ -36,15 +35,15 @@ type PeerAuthenticationsGetter interface {
 
 // PeerAuthenticationInterface has methods to work with PeerAuthentication resources.
 type PeerAuthenticationInterface interface {
-	Create(ctx context.Context, peerAuthentication *v1beta1.PeerAuthentication, opts v1.CreateOptions) (*v1beta1.PeerAuthentication, error)
-	Update(ctx context.Context, peerAuthentication *v1beta1.PeerAuthentication, opts v1.UpdateOptions) (*v1beta1.PeerAuthentication, error)
-	UpdateStatus(ctx context.Context, peerAuthentication *v1beta1.PeerAuthentication, opts v1.UpdateOptions) (*v1beta1.PeerAuthentication, error)
-	Delete(ctx context.Context, name string, opts v1.DeleteOptions) error
-	DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error
-	Get(ctx context.Context, name string, opts v1.GetOptions) (*v1beta1.PeerAuthentication, error)
-	List(ctx context.Context, opts v1.ListOptions) (*v1beta1.PeerAuthenticationList, error)
-	Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error)
-	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1beta1.PeerAuthentication, err error)
+	Create(*v1beta1.PeerAuthentication) (*v1beta1.PeerAuthentication, error)
+	Update(*v1beta1.PeerAuthentication) (*v1beta1.PeerAuthentication, error)
+	UpdateStatus(*v1beta1.PeerAuthentication) (*v1beta1.PeerAuthentication, error)
+	Delete(name string, options *v1.DeleteOptions) error
+	DeleteCollection(options *v1.DeleteOptions, listOptions v1.ListOptions) error
+	Get(name string, options v1.GetOptions) (*v1beta1.PeerAuthentication, error)
+	List(opts v1.ListOptions) (*v1beta1.PeerAuthenticationList, error)
+	Watch(opts v1.ListOptions) (watch.Interface, error)
+	Patch(name string, pt types.PatchType, data []byte, subresources ...string) (result *v1beta1.PeerAuthentication, err error)
 	PeerAuthenticationExpansion
 }
 
@@ -63,20 +62,20 @@ func newPeerAuthentications(c *SecurityV1beta1Client, namespace string) *peerAut
 }
 
 // Get takes name of the peerAuthentication, and returns the corresponding peerAuthentication object, and an error if there is any.
-func (c *peerAuthentications) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1beta1.PeerAuthentication, err error) {
+func (c *peerAuthentications) Get(name string, options v1.GetOptions) (result *v1beta1.PeerAuthentication, err error) {
 	result = &v1beta1.PeerAuthentication{}
 	err = c.client.Get().
 		Namespace(c.ns).
 		Resource("peerauthentications").
 		Name(name).
 		VersionedParams(&options, scheme.ParameterCodec).
-		Do(ctx).
+		Do().
 		Into(result)
 	return
 }
 
 // List takes label and field selectors, and returns the list of PeerAuthentications that match those selectors.
-func (c *peerAuthentications) List(ctx context.Context, opts v1.ListOptions) (result *v1beta1.PeerAuthenticationList, err error) {
+func (c *peerAuthentications) List(opts v1.ListOptions) (result *v1beta1.PeerAuthenticationList, err error) {
 	var timeout time.Duration
 	if opts.TimeoutSeconds != nil {
 		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
@@ -87,13 +86,13 @@ func (c *peerAuthentications) List(ctx context.Context, opts v1.ListOptions) (re
 		Resource("peerauthentications").
 		VersionedParams(&opts, scheme.ParameterCodec).
 		Timeout(timeout).
-		Do(ctx).
+		Do().
 		Into(result)
 	return
 }
 
 // Watch returns a watch.Interface that watches the requested peerAuthentications.
-func (c *peerAuthentications) Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error) {
+func (c *peerAuthentications) Watch(opts v1.ListOptions) (watch.Interface, error) {
 	var timeout time.Duration
 	if opts.TimeoutSeconds != nil {
 		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
@@ -104,90 +103,87 @@ func (c *peerAuthentications) Watch(ctx context.Context, opts v1.ListOptions) (w
 		Resource("peerauthentications").
 		VersionedParams(&opts, scheme.ParameterCodec).
 		Timeout(timeout).
-		Watch(ctx)
+		Watch()
 }
 
 // Create takes the representation of a peerAuthentication and creates it.  Returns the server's representation of the peerAuthentication, and an error, if there is any.
-func (c *peerAuthentications) Create(ctx context.Context, peerAuthentication *v1beta1.PeerAuthentication, opts v1.CreateOptions) (result *v1beta1.PeerAuthentication, err error) {
+func (c *peerAuthentications) Create(peerAuthentication *v1beta1.PeerAuthentication) (result *v1beta1.PeerAuthentication, err error) {
 	result = &v1beta1.PeerAuthentication{}
 	err = c.client.Post().
 		Namespace(c.ns).
 		Resource("peerauthentications").
-		VersionedParams(&opts, scheme.ParameterCodec).
 		Body(peerAuthentication).
-		Do(ctx).
+		Do().
 		Into(result)
 	return
 }
 
 // Update takes the representation of a peerAuthentication and updates it. Returns the server's representation of the peerAuthentication, and an error, if there is any.
-func (c *peerAuthentications) Update(ctx context.Context, peerAuthentication *v1beta1.PeerAuthentication, opts v1.UpdateOptions) (result *v1beta1.PeerAuthentication, err error) {
+func (c *peerAuthentications) Update(peerAuthentication *v1beta1.PeerAuthentication) (result *v1beta1.PeerAuthentication, err error) {
 	result = &v1beta1.PeerAuthentication{}
 	err = c.client.Put().
 		Namespace(c.ns).
 		Resource("peerauthentications").
 		Name(peerAuthentication.Name).
-		VersionedParams(&opts, scheme.ParameterCodec).
 		Body(peerAuthentication).
-		Do(ctx).
+		Do().
 		Into(result)
 	return
 }
 
 // UpdateStatus was generated because the type contains a Status member.
 // Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
-func (c *peerAuthentications) UpdateStatus(ctx context.Context, peerAuthentication *v1beta1.PeerAuthentication, opts v1.UpdateOptions) (result *v1beta1.PeerAuthentication, err error) {
+
+func (c *peerAuthentications) UpdateStatus(peerAuthentication *v1beta1.PeerAuthentication) (result *v1beta1.PeerAuthentication, err error) {
 	result = &v1beta1.PeerAuthentication{}
 	err = c.client.Put().
 		Namespace(c.ns).
 		Resource("peerauthentications").
 		Name(peerAuthentication.Name).
 		SubResource("status").
-		VersionedParams(&opts, scheme.ParameterCodec).
 		Body(peerAuthentication).
-		Do(ctx).
+		Do().
 		Into(result)
 	return
 }
 
 // Delete takes name of the peerAuthentication and deletes it. Returns an error if one occurs.
-func (c *peerAuthentications) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
+func (c *peerAuthentications) Delete(name string, options *v1.DeleteOptions) error {
 	return c.client.Delete().
 		Namespace(c.ns).
 		Resource("peerauthentications").
 		Name(name).
-		Body(&opts).
-		Do(ctx).
+		Body(options).
+		Do().
 		Error()
 }
 
 // DeleteCollection deletes a collection of objects.
-func (c *peerAuthentications) DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error {
+func (c *peerAuthentications) DeleteCollection(options *v1.DeleteOptions, listOptions v1.ListOptions) error {
 	var timeout time.Duration
-	if listOpts.TimeoutSeconds != nil {
-		timeout = time.Duration(*listOpts.TimeoutSeconds) * time.Second
+	if listOptions.TimeoutSeconds != nil {
+		timeout = time.Duration(*listOptions.TimeoutSeconds) * time.Second
 	}
 	return c.client.Delete().
 		Namespace(c.ns).
 		Resource("peerauthentications").
-		VersionedParams(&listOpts, scheme.ParameterCodec).
+		VersionedParams(&listOptions, scheme.ParameterCodec).
 		Timeout(timeout).
-		Body(&opts).
-		Do(ctx).
+		Body(options).
+		Do().
 		Error()
 }
 
 // Patch applies the patch and returns the patched peerAuthentication.
-func (c *peerAuthentications) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1beta1.PeerAuthentication, err error) {
+func (c *peerAuthentications) Patch(name string, pt types.PatchType, data []byte, subresources ...string) (result *v1beta1.PeerAuthentication, err error) {
 	result = &v1beta1.PeerAuthentication{}
 	err = c.client.Patch(pt).
 		Namespace(c.ns).
 		Resource("peerauthentications").
-		Name(name).
 		SubResource(subresources...).
-		VersionedParams(&opts, scheme.ParameterCodec).
+		Name(name).
 		Body(data).
-		Do(ctx).
+		Do().
 		Into(result)
 	return
 }

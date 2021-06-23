@@ -17,7 +17,6 @@
 package v1alpha3
 
 import (
-	"context"
 	time "time"
 
 	networkingv1alpha3 "istio.io/client-go/pkg/apis/networking/v1alpha3"
@@ -60,13 +59,13 @@ func NewFilteredWorkloadGroupInformer(client versioned.Interface, namespace stri
 				if tweakListOptions != nil {
 					tweakListOptions(&options)
 				}
-				return client.NetworkingV1alpha3().WorkloadGroups(namespace).List(context.TODO(), options)
+				return client.NetworkingV1alpha3().WorkloadGroups(namespace).List(options)
 			},
 			WatchFunc: func(options v1.ListOptions) (watch.Interface, error) {
 				if tweakListOptions != nil {
 					tweakListOptions(&options)
 				}
-				return client.NetworkingV1alpha3().WorkloadGroups(namespace).Watch(context.TODO(), options)
+				return client.NetworkingV1alpha3().WorkloadGroups(namespace).Watch(options)
 			},
 		},
 		&networkingv1alpha3.WorkloadGroup{},

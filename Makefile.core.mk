@@ -101,6 +101,23 @@ generate-k8s-client:
 	@$(move_generated)
 	@$(rename_generated_files)
 
+generate-kubetype-gen:
+	# generate kube api type wrappers for istio types
+	@$(kubetype_gen) --input-dirs $(kube_istio_source_packages) --output-package $(kube_api_base_package) -h $(kube_go_header_text)
+	@$(move_generated)
+
+generate-k8s-client-without-kubetype-gen:
+	# generate deepcopy for kube api types
+	@$(deepcopy_gen) --input-dirs $(kube_api_packages) -O zz_generated.deepcopy  -h $(kube_go_header_text)
+	# generate clientsets for kube api types
+	@$(client_gen) --clientset-name $(kube_clientset_name) --input-base "" --input  $(kube_api_packages) --output-package $(kube_clientset_package) -h $(kube_go_header_text)
+	# generate listers for kube api types
+	@$(lister_gen) --input-dirs $(kube_api_packages) --output-package $(kube_listers_package) -h $(kube_go_header_text)
+	# generate informers for kube api types
+	@$(informer_gen) --input-dirs $(kube_api_packages) --versioned-clientset-package $(kube_clientset_package)/$(kube_clientset_name) --listers-package $(kube_listers_package) --output-package $(kube_informers_package) -h $(kube_go_header_text)
+	@$(move_generated)
+	@$(rename_generated_files)
+
 .PHONY: build-k8s-client verify-k8s-client
 build-k8s-client:
 	# building k8s client

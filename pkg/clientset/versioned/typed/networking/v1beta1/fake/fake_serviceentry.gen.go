@@ -17,8 +17,6 @@
 package fake
 
 import (
-	"context"
-
 	v1beta1 "istio.io/client-go/pkg/apis/networking/v1beta1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	labels "k8s.io/apimachinery/pkg/labels"
@@ -39,7 +37,7 @@ var serviceentriesResource = schema.GroupVersionResource{Group: "networking.isti
 var serviceentriesKind = schema.GroupVersionKind{Group: "networking.istio.io", Version: "v1beta1", Kind: "ServiceEntry"}
 
 // Get takes name of the serviceEntry, and returns the corresponding serviceEntry object, and an error if there is any.
-func (c *FakeServiceEntries) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1beta1.ServiceEntry, err error) {
+func (c *FakeServiceEntries) Get(name string, options v1.GetOptions) (result *v1beta1.ServiceEntry, err error) {
 	obj, err := c.Fake.
 		Invokes(testing.NewGetAction(serviceentriesResource, c.ns, name), &v1beta1.ServiceEntry{})
 
@@ -50,7 +48,7 @@ func (c *FakeServiceEntries) Get(ctx context.Context, name string, options v1.Ge
 }
 
 // List takes label and field selectors, and returns the list of ServiceEntries that match those selectors.
-func (c *FakeServiceEntries) List(ctx context.Context, opts v1.ListOptions) (result *v1beta1.ServiceEntryList, err error) {
+func (c *FakeServiceEntries) List(opts v1.ListOptions) (result *v1beta1.ServiceEntryList, err error) {
 	obj, err := c.Fake.
 		Invokes(testing.NewListAction(serviceentriesResource, serviceentriesKind, c.ns, opts), &v1beta1.ServiceEntryList{})
 
@@ -72,14 +70,14 @@ func (c *FakeServiceEntries) List(ctx context.Context, opts v1.ListOptions) (res
 }
 
 // Watch returns a watch.Interface that watches the requested serviceEntries.
-func (c *FakeServiceEntries) Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error) {
+func (c *FakeServiceEntries) Watch(opts v1.ListOptions) (watch.Interface, error) {
 	return c.Fake.
 		InvokesWatch(testing.NewWatchAction(serviceentriesResource, c.ns, opts))
 
 }
 
 // Create takes the representation of a serviceEntry and creates it.  Returns the server's representation of the serviceEntry, and an error, if there is any.
-func (c *FakeServiceEntries) Create(ctx context.Context, serviceEntry *v1beta1.ServiceEntry, opts v1.CreateOptions) (result *v1beta1.ServiceEntry, err error) {
+func (c *FakeServiceEntries) Create(serviceEntry *v1beta1.ServiceEntry) (result *v1beta1.ServiceEntry, err error) {
 	obj, err := c.Fake.
 		Invokes(testing.NewCreateAction(serviceentriesResource, c.ns, serviceEntry), &v1beta1.ServiceEntry{})
 
@@ -90,7 +88,7 @@ func (c *FakeServiceEntries) Create(ctx context.Context, serviceEntry *v1beta1.S
 }
 
 // Update takes the representation of a serviceEntry and updates it. Returns the server's representation of the serviceEntry, and an error, if there is any.
-func (c *FakeServiceEntries) Update(ctx context.Context, serviceEntry *v1beta1.ServiceEntry, opts v1.UpdateOptions) (result *v1beta1.ServiceEntry, err error) {
+func (c *FakeServiceEntries) Update(serviceEntry *v1beta1.ServiceEntry) (result *v1beta1.ServiceEntry, err error) {
 	obj, err := c.Fake.
 		Invokes(testing.NewUpdateAction(serviceentriesResource, c.ns, serviceEntry), &v1beta1.ServiceEntry{})
 
@@ -102,7 +100,7 @@ func (c *FakeServiceEntries) Update(ctx context.Context, serviceEntry *v1beta1.S
 
 // UpdateStatus was generated because the type contains a Status member.
 // Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
-func (c *FakeServiceEntries) UpdateStatus(ctx context.Context, serviceEntry *v1beta1.ServiceEntry, opts v1.UpdateOptions) (*v1beta1.ServiceEntry, error) {
+func (c *FakeServiceEntries) UpdateStatus(serviceEntry *v1beta1.ServiceEntry) (*v1beta1.ServiceEntry, error) {
 	obj, err := c.Fake.
 		Invokes(testing.NewUpdateSubresourceAction(serviceentriesResource, "status", c.ns, serviceEntry), &v1beta1.ServiceEntry{})
 
@@ -113,7 +111,7 @@ func (c *FakeServiceEntries) UpdateStatus(ctx context.Context, serviceEntry *v1b
 }
 
 // Delete takes name of the serviceEntry and deletes it. Returns an error if one occurs.
-func (c *FakeServiceEntries) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
+func (c *FakeServiceEntries) Delete(name string, options *v1.DeleteOptions) error {
 	_, err := c.Fake.
 		Invokes(testing.NewDeleteAction(serviceentriesResource, c.ns, name), &v1beta1.ServiceEntry{})
 
@@ -121,15 +119,15 @@ func (c *FakeServiceEntries) Delete(ctx context.Context, name string, opts v1.De
 }
 
 // DeleteCollection deletes a collection of objects.
-func (c *FakeServiceEntries) DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error {
-	action := testing.NewDeleteCollectionAction(serviceentriesResource, c.ns, listOpts)
+func (c *FakeServiceEntries) DeleteCollection(options *v1.DeleteOptions, listOptions v1.ListOptions) error {
+	action := testing.NewDeleteCollectionAction(serviceentriesResource, c.ns, listOptions)
 
 	_, err := c.Fake.Invokes(action, &v1beta1.ServiceEntryList{})
 	return err
 }
 
 // Patch applies the patch and returns the patched serviceEntry.
-func (c *FakeServiceEntries) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1beta1.ServiceEntry, err error) {
+func (c *FakeServiceEntries) Patch(name string, pt types.PatchType, data []byte, subresources ...string) (result *v1beta1.ServiceEntry, err error) {
 	obj, err := c.Fake.
 		Invokes(testing.NewPatchSubresourceAction(serviceentriesResource, c.ns, name, pt, data, subresources...), &v1beta1.ServiceEntry{})
 

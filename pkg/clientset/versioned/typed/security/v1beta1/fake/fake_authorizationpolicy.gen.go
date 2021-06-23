@@ -17,8 +17,6 @@
 package fake
 
 import (
-	"context"
-
 	v1beta1 "istio.io/client-go/pkg/apis/security/v1beta1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	labels "k8s.io/apimachinery/pkg/labels"
@@ -39,7 +37,7 @@ var authorizationpoliciesResource = schema.GroupVersionResource{Group: "security
 var authorizationpoliciesKind = schema.GroupVersionKind{Group: "security.istio.io", Version: "v1beta1", Kind: "AuthorizationPolicy"}
 
 // Get takes name of the authorizationPolicy, and returns the corresponding authorizationPolicy object, and an error if there is any.
-func (c *FakeAuthorizationPolicies) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1beta1.AuthorizationPolicy, err error) {
+func (c *FakeAuthorizationPolicies) Get(name string, options v1.GetOptions) (result *v1beta1.AuthorizationPolicy, err error) {
 	obj, err := c.Fake.
 		Invokes(testing.NewGetAction(authorizationpoliciesResource, c.ns, name), &v1beta1.AuthorizationPolicy{})
 
@@ -50,7 +48,7 @@ func (c *FakeAuthorizationPolicies) Get(ctx context.Context, name string, option
 }
 
 // List takes label and field selectors, and returns the list of AuthorizationPolicies that match those selectors.
-func (c *FakeAuthorizationPolicies) List(ctx context.Context, opts v1.ListOptions) (result *v1beta1.AuthorizationPolicyList, err error) {
+func (c *FakeAuthorizationPolicies) List(opts v1.ListOptions) (result *v1beta1.AuthorizationPolicyList, err error) {
 	obj, err := c.Fake.
 		Invokes(testing.NewListAction(authorizationpoliciesResource, authorizationpoliciesKind, c.ns, opts), &v1beta1.AuthorizationPolicyList{})
 
@@ -72,14 +70,14 @@ func (c *FakeAuthorizationPolicies) List(ctx context.Context, opts v1.ListOption
 }
 
 // Watch returns a watch.Interface that watches the requested authorizationPolicies.
-func (c *FakeAuthorizationPolicies) Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error) {
+func (c *FakeAuthorizationPolicies) Watch(opts v1.ListOptions) (watch.Interface, error) {
 	return c.Fake.
 		InvokesWatch(testing.NewWatchAction(authorizationpoliciesResource, c.ns, opts))
 
 }
 
 // Create takes the representation of a authorizationPolicy and creates it.  Returns the server's representation of the authorizationPolicy, and an error, if there is any.
-func (c *FakeAuthorizationPolicies) Create(ctx context.Context, authorizationPolicy *v1beta1.AuthorizationPolicy, opts v1.CreateOptions) (result *v1beta1.AuthorizationPolicy, err error) {
+func (c *FakeAuthorizationPolicies) Create(authorizationPolicy *v1beta1.AuthorizationPolicy) (result *v1beta1.AuthorizationPolicy, err error) {
 	obj, err := c.Fake.
 		Invokes(testing.NewCreateAction(authorizationpoliciesResource, c.ns, authorizationPolicy), &v1beta1.AuthorizationPolicy{})
 
@@ -90,7 +88,7 @@ func (c *FakeAuthorizationPolicies) Create(ctx context.Context, authorizationPol
 }
 
 // Update takes the representation of a authorizationPolicy and updates it. Returns the server's representation of the authorizationPolicy, and an error, if there is any.
-func (c *FakeAuthorizationPolicies) Update(ctx context.Context, authorizationPolicy *v1beta1.AuthorizationPolicy, opts v1.UpdateOptions) (result *v1beta1.AuthorizationPolicy, err error) {
+func (c *FakeAuthorizationPolicies) Update(authorizationPolicy *v1beta1.AuthorizationPolicy) (result *v1beta1.AuthorizationPolicy, err error) {
 	obj, err := c.Fake.
 		Invokes(testing.NewUpdateAction(authorizationpoliciesResource, c.ns, authorizationPolicy), &v1beta1.AuthorizationPolicy{})
 
@@ -102,7 +100,7 @@ func (c *FakeAuthorizationPolicies) Update(ctx context.Context, authorizationPol
 
 // UpdateStatus was generated because the type contains a Status member.
 // Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
-func (c *FakeAuthorizationPolicies) UpdateStatus(ctx context.Context, authorizationPolicy *v1beta1.AuthorizationPolicy, opts v1.UpdateOptions) (*v1beta1.AuthorizationPolicy, error) {
+func (c *FakeAuthorizationPolicies) UpdateStatus(authorizationPolicy *v1beta1.AuthorizationPolicy) (*v1beta1.AuthorizationPolicy, error) {
 	obj, err := c.Fake.
 		Invokes(testing.NewUpdateSubresourceAction(authorizationpoliciesResource, "status", c.ns, authorizationPolicy), &v1beta1.AuthorizationPolicy{})
 
@@ -113,7 +111,7 @@ func (c *FakeAuthorizationPolicies) UpdateStatus(ctx context.Context, authorizat
 }
 
 // Delete takes name of the authorizationPolicy and deletes it. Returns an error if one occurs.
-func (c *FakeAuthorizationPolicies) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
+func (c *FakeAuthorizationPolicies) Delete(name string, options *v1.DeleteOptions) error {
 	_, err := c.Fake.
 		Invokes(testing.NewDeleteAction(authorizationpoliciesResource, c.ns, name), &v1beta1.AuthorizationPolicy{})
 
@@ -121,15 +119,15 @@ func (c *FakeAuthorizationPolicies) Delete(ctx context.Context, name string, opt
 }
 
 // DeleteCollection deletes a collection of objects.
-func (c *FakeAuthorizationPolicies) DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error {
-	action := testing.NewDeleteCollectionAction(authorizationpoliciesResource, c.ns, listOpts)
+func (c *FakeAuthorizationPolicies) DeleteCollection(options *v1.DeleteOptions, listOptions v1.ListOptions) error {
+	action := testing.NewDeleteCollectionAction(authorizationpoliciesResource, c.ns, listOptions)
 
 	_, err := c.Fake.Invokes(action, &v1beta1.AuthorizationPolicyList{})
 	return err
 }
 
 // Patch applies the patch and returns the patched authorizationPolicy.
-func (c *FakeAuthorizationPolicies) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1beta1.AuthorizationPolicy, err error) {
+func (c *FakeAuthorizationPolicies) Patch(name string, pt types.PatchType, data []byte, subresources ...string) (result *v1beta1.AuthorizationPolicy, err error) {
 	obj, err := c.Fake.
 		Invokes(testing.NewPatchSubresourceAction(authorizationpoliciesResource, c.ns, name, pt, data, subresources...), &v1beta1.AuthorizationPolicy{})
 

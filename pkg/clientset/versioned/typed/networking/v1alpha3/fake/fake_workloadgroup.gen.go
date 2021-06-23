@@ -17,8 +17,6 @@
 package fake
 
 import (
-	"context"
-
 	v1alpha3 "istio.io/client-go/pkg/apis/networking/v1alpha3"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	labels "k8s.io/apimachinery/pkg/labels"
@@ -39,7 +37,7 @@ var workloadgroupsResource = schema.GroupVersionResource{Group: "networking.isti
 var workloadgroupsKind = schema.GroupVersionKind{Group: "networking.istio.io", Version: "v1alpha3", Kind: "WorkloadGroup"}
 
 // Get takes name of the workloadGroup, and returns the corresponding workloadGroup object, and an error if there is any.
-func (c *FakeWorkloadGroups) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1alpha3.WorkloadGroup, err error) {
+func (c *FakeWorkloadGroups) Get(name string, options v1.GetOptions) (result *v1alpha3.WorkloadGroup, err error) {
 	obj, err := c.Fake.
 		Invokes(testing.NewGetAction(workloadgroupsResource, c.ns, name), &v1alpha3.WorkloadGroup{})
 
@@ -50,7 +48,7 @@ func (c *FakeWorkloadGroups) Get(ctx context.Context, name string, options v1.Ge
 }
 
 // List takes label and field selectors, and returns the list of WorkloadGroups that match those selectors.
-func (c *FakeWorkloadGroups) List(ctx context.Context, opts v1.ListOptions) (result *v1alpha3.WorkloadGroupList, err error) {
+func (c *FakeWorkloadGroups) List(opts v1.ListOptions) (result *v1alpha3.WorkloadGroupList, err error) {
 	obj, err := c.Fake.
 		Invokes(testing.NewListAction(workloadgroupsResource, workloadgroupsKind, c.ns, opts), &v1alpha3.WorkloadGroupList{})
 
@@ -72,14 +70,14 @@ func (c *FakeWorkloadGroups) List(ctx context.Context, opts v1.ListOptions) (res
 }
 
 // Watch returns a watch.Interface that watches the requested workloadGroups.
-func (c *FakeWorkloadGroups) Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error) {
+func (c *FakeWorkloadGroups) Watch(opts v1.ListOptions) (watch.Interface, error) {
 	return c.Fake.
 		InvokesWatch(testing.NewWatchAction(workloadgroupsResource, c.ns, opts))
 
 }
 
 // Create takes the representation of a workloadGroup and creates it.  Returns the server's representation of the workloadGroup, and an error, if there is any.
-func (c *FakeWorkloadGroups) Create(ctx context.Context, workloadGroup *v1alpha3.WorkloadGroup, opts v1.CreateOptions) (result *v1alpha3.WorkloadGroup, err error) {
+func (c *FakeWorkloadGroups) Create(workloadGroup *v1alpha3.WorkloadGroup) (result *v1alpha3.WorkloadGroup, err error) {
 	obj, err := c.Fake.
 		Invokes(testing.NewCreateAction(workloadgroupsResource, c.ns, workloadGroup), &v1alpha3.WorkloadGroup{})
 
@@ -90,7 +88,7 @@ func (c *FakeWorkloadGroups) Create(ctx context.Context, workloadGroup *v1alpha3
 }
 
 // Update takes the representation of a workloadGroup and updates it. Returns the server's representation of the workloadGroup, and an error, if there is any.
-func (c *FakeWorkloadGroups) Update(ctx context.Context, workloadGroup *v1alpha3.WorkloadGroup, opts v1.UpdateOptions) (result *v1alpha3.WorkloadGroup, err error) {
+func (c *FakeWorkloadGroups) Update(workloadGroup *v1alpha3.WorkloadGroup) (result *v1alpha3.WorkloadGroup, err error) {
 	obj, err := c.Fake.
 		Invokes(testing.NewUpdateAction(workloadgroupsResource, c.ns, workloadGroup), &v1alpha3.WorkloadGroup{})
 
@@ -102,7 +100,7 @@ func (c *FakeWorkloadGroups) Update(ctx context.Context, workloadGroup *v1alpha3
 
 // UpdateStatus was generated because the type contains a Status member.
 // Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
-func (c *FakeWorkloadGroups) UpdateStatus(ctx context.Context, workloadGroup *v1alpha3.WorkloadGroup, opts v1.UpdateOptions) (*v1alpha3.WorkloadGroup, error) {
+func (c *FakeWorkloadGroups) UpdateStatus(workloadGroup *v1alpha3.WorkloadGroup) (*v1alpha3.WorkloadGroup, error) {
 	obj, err := c.Fake.
 		Invokes(testing.NewUpdateSubresourceAction(workloadgroupsResource, "status", c.ns, workloadGroup), &v1alpha3.WorkloadGroup{})
 
@@ -113,7 +111,7 @@ func (c *FakeWorkloadGroups) UpdateStatus(ctx context.Context, workloadGroup *v1
 }
 
 // Delete takes name of the workloadGroup and deletes it. Returns an error if one occurs.
-func (c *FakeWorkloadGroups) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
+func (c *FakeWorkloadGroups) Delete(name string, options *v1.DeleteOptions) error {
 	_, err := c.Fake.
 		Invokes(testing.NewDeleteAction(workloadgroupsResource, c.ns, name), &v1alpha3.WorkloadGroup{})
 
@@ -121,15 +119,15 @@ func (c *FakeWorkloadGroups) Delete(ctx context.Context, name string, opts v1.De
 }
 
 // DeleteCollection deletes a collection of objects.
-func (c *FakeWorkloadGroups) DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error {
-	action := testing.NewDeleteCollectionAction(workloadgroupsResource, c.ns, listOpts)
+func (c *FakeWorkloadGroups) DeleteCollection(options *v1.DeleteOptions, listOptions v1.ListOptions) error {
+	action := testing.NewDeleteCollectionAction(workloadgroupsResource, c.ns, listOptions)
 
 	_, err := c.Fake.Invokes(action, &v1alpha3.WorkloadGroupList{})
 	return err
 }
 
 // Patch applies the patch and returns the patched workloadGroup.
-func (c *FakeWorkloadGroups) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha3.WorkloadGroup, err error) {
+func (c *FakeWorkloadGroups) Patch(name string, pt types.PatchType, data []byte, subresources ...string) (result *v1alpha3.WorkloadGroup, err error) {
 	obj, err := c.Fake.
 		Invokes(testing.NewPatchSubresourceAction(workloadgroupsResource, c.ns, name, pt, data, subresources...), &v1alpha3.WorkloadGroup{})
 
